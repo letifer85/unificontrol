@@ -93,7 +93,7 @@ class UnifiClient(metaclass=MetaNameFixer):
         request = requests.Request(method, url, json=rest_dict)
         ses = self._session
 
-        resp = ses.send(ses.prepare_request(request))
+        resp = ses.send(ses.prepare_request(request), verify=False)
 
         # If we fail with unauthorised and need login then retry just once
         if resp.status_code == 401 and need_login:
@@ -104,7 +104,7 @@ class UnifiClient(metaclass=MetaNameFixer):
                     raise UnifiLoginError("Invalid credentials")
                 else:
                     raise UnifiLoginError("Need user name and password to log in")
-            resp = ses.send(ses.prepare_request(request))
+            resp = ses.send(ses.prepare_request(request), verify=False)
 
         if resp.ok:
             response = resp.json()
